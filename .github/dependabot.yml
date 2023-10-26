@@ -6,3 +6,8 @@ updates:
       interval: "daily"
       time: "10:00"
       timezone: "Asia/Tokyo"
+    groups:
+      rubocop:
+        patterns:
+          - "rubocop*"
+  
