@@ -2,8 +2,7 @@ name: Dependabot fetch metadata
 on: pull_request
 
 permissions:
-  pull-requests: write
-  contents: write
+  pull-requests: read
 
 jobs:
   dependabot:
@@ -13,3 +12,6 @@ jobs:
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v1
+      - name: Echo Dependabot metadata
+        run: |
+          echo "${{ toJSON(steps.dependabot-metadata.outputs) }}"
