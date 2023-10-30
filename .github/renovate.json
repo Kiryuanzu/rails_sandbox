@@ -7,10 +7,15 @@
   "branchPrefix": "renovate_",
   "rebaseWhen": "never",
   "labels": [],
-  "ruby": {
-    "enabled": false
-  },
   "bundler": {
     "enabled": false
-  }
+  },
+  "packageRules": [
+    {
+      "matchCategories": [
+        "ruby"
+      ],
+      "enabled": false
+    }
+  ]
 }
