@@ -1,3 +1,7 @@
 * @Kiryuanzu
+
+# 以下のファイルは CODEOWNERS設定をしない
+# ライブラリアップデート系の PR は githubactions[bot] の approve で Auto Merge したいため
 Gemfile*
-client/package*
+client/package.json
+client/yarn.lock
