@@ -2,8 +2,8 @@ name: renovate and dependabot author check
 
 on:
   workflow_run:
-    workflows:
-      - Frontend CI
+    workflows: [Frontend CI]
+    types: [completed]
 
 permissions:
   pull-requests: write
