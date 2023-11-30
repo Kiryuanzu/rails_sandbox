@@ -22,3 +22,5 @@ jobs:
         run: |
           echo ${{ github.event.workflow_run.conclusion }}
           echo ${{ github.actor }}
+          echo ${{ github.event.workflow_run.head_branch }}
+          echo ${{ github.event.workflow_run.head_sha }}
