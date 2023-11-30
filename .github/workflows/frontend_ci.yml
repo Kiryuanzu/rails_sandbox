@@ -1,0 +1,22 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    paths:
+      - "client/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: write
+  issues: write
+  repository-projects: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo test
