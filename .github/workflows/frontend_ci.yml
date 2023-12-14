@@ -20,3 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo test
+  add_frontend_label:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr edit "$PR_URL" --add-label 'frontend'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
