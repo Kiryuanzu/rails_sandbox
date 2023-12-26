@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "client/**"
+  pull_request_review:
+    types: [submitted]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
@@ -19,7 +21,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo test
+      - run: echo ${{ github.event.pull_request.base.ref }}
+      - run: echo ${{ github.event.pull_request.head.ref }}
   add_frontend_label:
     runs-on: ubuntu-latest
     steps:
