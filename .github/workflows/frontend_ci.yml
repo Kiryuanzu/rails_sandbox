@@ -23,6 +23,7 @@ jobs:
     steps:
       - run: echo ${{ github.event.pull_request.base.ref }}
       - run: echo ${{ github.event.pull_request.head.ref }}
+      - run: echo ${{ github.head_ref }}
   add_frontend_label:
     runs-on: ubuntu-latest
     steps:
