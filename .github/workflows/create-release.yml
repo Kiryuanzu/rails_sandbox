@@ -11,21 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Get latest release
-        id: get_latest_release
-        uses: octokit/request-action@v2.x
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          route: GET /repos/{repo}/releases/latest
-          repo: ${{ github.repository }}
-      - name: Set latest release tag
-        run: |
-          echo "latest_release_tag=${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}" >> "$GITHUB_ENV"
-      - name: Set latest tag
-        run: |
-          git fetch --prune --unshallow
-          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
       - name: Set new release tag
         env:
           TZ: 'Asia/Tokyo'
@@ -33,7 +18,6 @@ jobs:
           release_datetime=$(date +'%Y%m%d-%H%M')
           echo "new_release_tag=v$release_datetime" >> $GITHUB_ENV
       - name: Create Release
-        if: env.latest_release_tag != env.latest_tag
         uses: octokit/request-action@v2.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
