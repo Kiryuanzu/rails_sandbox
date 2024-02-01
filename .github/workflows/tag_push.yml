@@ -16,5 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          git tag ${{ github.event.pull_request.head.sha }}
-          git push origin ${{ github.event.pull_request.head.sha }}
+          git tag test-tag
+          git push origin test-tag
