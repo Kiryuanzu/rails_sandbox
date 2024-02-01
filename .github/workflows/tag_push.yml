@@ -15,6 +15,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: get short SHA
+        id: short-sha
+        run: echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - run: |
-          git tag test-tag
-          git push origin test-tag
+          git tag ${{ steps.short-sha.outputs.tag }}
+          git push origin ${{ steps.short-sha.outputs.tag }}
