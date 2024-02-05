@@ -14,7 +14,7 @@ jobs:
       - name: check release tag
         id: new_release_tag
         run: |
-          release_commit=$( git rev-perse HEAD^ )
+          release_commit=$( git rev-parse HEAD^ )
           release_tag=$( git tag -l --contains $release_commit )
           echo "new_release_tag=v$release_tag" >> $GITHUB_OUTPUT
       - name: Create Release
