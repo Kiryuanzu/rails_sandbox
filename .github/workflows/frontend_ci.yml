@@ -1,0 +1,33 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    paths:
+      - "client/**"
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: write
+  issues: write
+  repository-projects: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event.pull_request.base.ref }}
+      - run: echo ${{ github.event.pull_request.head.ref }}
+      - run: echo ${{ github.head_ref }}
+  add_frontend_label:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr edit "$PR_URL" --add-label "frontend"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

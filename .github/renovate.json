@@ -1,6 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:best-practices"
+  ],
+  "prConcurrentLimit": 10,
+  "branchPrefix": "renovate_",
+  "rebaseWhen": "never",
+  "labels": [],
+  "bundler": {
+    "enabled": false
+  },
+  "packageRules": [
+    {
+      "matchCategories": [
+        "ruby"
+      ],
+      "enabled": false
+    }
   ]
 }

@@ -1,0 +1,26 @@
+name: renovate and dependabot author check
+
+on:
+  workflow_run:
+    workflows: [Frontend CI]
+    types: [completed]
+
+permissions:
+  pull-requests: write
+  contents: write
+  issues: write
+  repository-projects: write
+
+jobs:
+  check:
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      ( github.actor == 'renovate[bot]' || github.actor == 'dependabot[bot]' )
+    runs-on: ubuntu-latest
+    steps:
+      - name: check github event and actor
+        run: |
+          echo ${{ github.event.workflow_run.conclusion }}
+          echo ${{ github.actor }}
+          echo ${{ github.event.workflow_run.head_branch }}
+          echo ${{ github.event.workflow_run.head_sha }}

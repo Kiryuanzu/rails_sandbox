@@ -1,0 +1,27 @@
+name: tag push
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-tag-create-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: get release date
+        id: release_date
+        env:
+          TZ: 'Asia/Tokyo'
+        run: |
+          release_datetime=$(date +'%Y%m%d-%H%M')
+          echo "new_release_tag=v$release_datetime" >> $GITHUB_OUTPUT
+      - run: |
+          git tag ${{ steps.release_date.outputs.new_release_tag }}
+          git push origin ${{ steps.release_date.outputs.new_release_tag }}

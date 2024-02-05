@@ -1,0 +1,42 @@
+name: Create Release
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  create-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          fetch-depth: 0
+      - name: Get latest release
+        id: get_latest_release
+        uses: octokit/request-action@v2.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          route: GET /repos/{repo}/releases/latest
+          repo: ${{ github.repository }}
+      - name: Set latest release tag
+        run: |
+          echo "latest_release_tag=${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}" >> "$GITHUB_ENV"
+      - name: Set latest tag
+        run: |
+          latest_tag=$( git describe --tags "$(git rev-list --tags --max-count=1)" )
+          echo "latest_tag=$latest_tag" >> "$GITHUB_ENV"
+      - name: Create Release
+        if: env.latest_release_tag != env.latest_tag
+        uses: octokit/request-action@v2.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          route: POST /repos/{repo}/releases
+          repo: ${{ github.repository }}
+          tag_name: ${{ env.latest_tag }}
+          target_commitish: main
+          name: ${{ env.latest_tag }}
+          generate_release_notes: true
