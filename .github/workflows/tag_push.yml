@@ -15,9 +15,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: get short SHA
-        id: short-sha
-        run: echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: get release date
+        id: release_date
+        env:
+          TZ: 'Asia/Tokyo'
+        run: |
+          release_datetime=$(date +'%Y%m%d-%H%M')
+          echo "new_release_tag=v$release_datetime" >> $GITHUB_OUTPUT
       - run: |
-          git tag ${{ steps.short-sha.outputs.tag }}
-          git push origin ${{ steps.short-sha.outputs.tag }}
+          git tag ${{ steps.release_date.outputs.new_release_tag }}
+          git push origin ${{ steps.release_date.outputs.new_release_tag }}
