@@ -18,6 +18,7 @@ jobs:
           release_tag=$( git tag -l --contains $release_commit )
           echo "new_release_tag=v$release_tag" >> $GITHUB_OUTPUT
       - name: Create Release
+        if: ${{ steps.new_release_tag.outputs.new_release_tag }} != ""
         uses: octokit/request-action@v2.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
