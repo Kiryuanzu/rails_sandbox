@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set new release tag
-        env:
-          TZ: 'Asia/Tokyo'
+      - name: check release tag
+        id: new_release_tag
         run: |
-          release_datetime=$(date +'%Y%m%d-%H%M')
-          echo "new_release_tag=v$release_datetime" >> $GITHUB_ENV
+          release_commit=$( git rev-perse HEAD^ )
+          release_tag=$( git tag -l --contains $release_commit )
+          echo "new_release_tag=v$release_tag" >> $GITHUB_OUTPUT
       - name: Create Release
         uses: octokit/request-action@v2.x
         env:
@@ -24,7 +24,7 @@ jobs:
         with:
           route: POST /repos/{repo}/releases
           repo: ${{ github.repository }}
-          tag_name: ${{ env.new_release_tag }}
+          tag_name: ${{ steps.new_release_tag.outputs.new_release_tag }}
           target_commitish: main
-          name: ${{ env.new_release_tag }}
+          name: ${{ steps.new_release_tag.outputs.new_release_tag }}
           generate_release_notes: true
