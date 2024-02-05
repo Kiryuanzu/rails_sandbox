@@ -24,15 +24,10 @@ jobs:
       - name: Set latest release tag
         run: |
           echo "latest_release_tag=${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}" >> "$GITHUB_ENV"
-      # - name: check release tag
-      #   id: new_release_tag
-      #   run: |
-      #     release_commit=$( git rev-parse HEAD^ )
-      #     release_tag=$( git tag -l --contains $release_commit )
-      #     echo "new_release_tag=$release_tag" >> $GITHUB_OUTPUT
       - name: Set latest tag
         run: |
-          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          latest_tag=$( git describe --tags "$(git rev-list --tags --max-count=1)" )
+          echo "latest_tag=$latest_tag" >> "$GITHUB_ENV"
       - name: Create Release
         if: env.latest_release_tag != env.latest_tag
         uses: octokit/request-action@v2.x
