@@ -13,21 +13,35 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 0
-      - name: check release tag
-        id: new_release_tag
+      - name: Get latest release
+        id: get_latest_release
+        uses: octokit/request-action@v2.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          route: GET /repos/{repo}/releases/latest
+          repo: ${{ github.repository }}
+      - name: Set latest release tag
         run: |
-          release_commit=$( git rev-parse HEAD^ )
-          release_tag=$( git tag -l --contains $release_commit )
-          echo "new_release_tag=$release_tag" >> $GITHUB_OUTPUT
+          echo "latest_release_tag=${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}" >> "$GITHUB_ENV"
+      # - name: check release tag
+      #   id: new_release_tag
+      #   run: |
+      #     release_commit=$( git rev-parse HEAD^ )
+      #     release_tag=$( git tag -l --contains $release_commit )
+      #     echo "new_release_tag=$release_tag" >> $GITHUB_OUTPUT
+      - name: Set latest tag
+        run: |
+          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
       - name: Create Release
-        if: ${{ steps.new_release_tag.outputs.new_release_tag }} != ""
+        if: env.latest_release_tag != env.latest_tag
         uses: octokit/request-action@v2.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           route: POST /repos/{repo}/releases
           repo: ${{ github.repository }}
-          tag_name: ${{ steps.new_release_tag.outputs.new_release_tag }}
+          tag_name: ${{ env.latest_tag }}
           target_commitish: main
-          name: ${{ steps.new_release_tag.outputs.new_release_tag }}
+          name: ${{ env.latest_tag }}
           generate_release_notes: true
