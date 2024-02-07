@@ -24,6 +24,7 @@ jobs:
       - name: Set latest release tag
         run: |
           echo "latest_release_tag=${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}" >> "$GITHUB_ENV"
+          echo "The latest release tag is $latest_release_tag"
       - name: Set latest tag
         run: |
           latest_tag=$( git describe --tags "$(git rev-list --tags --max-count=1)" )
