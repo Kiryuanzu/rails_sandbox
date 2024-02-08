@@ -41,8 +41,6 @@ jobs:
     if: ${{ needs.check-release-tag.outputs.latest_release_tag != needs.check-release-tag.outputs.latest_tag }}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-        with:
-          fetch-depth: 0
       - name: delete tag
         run: |
           git push origin --delete ${{ needs.check-release-tag.outputs.latest_tag }}
