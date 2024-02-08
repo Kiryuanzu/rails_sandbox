@@ -27,4 +27,5 @@ jobs:
       - run: |
           git show --format='%H' --no-patch
           git tag ${{ steps.release_date.outputs.new_release_tag }}
+          git show ${{ steps.release_date.outputs.new_release_tag }}
           git push origin ${{ steps.release_date.outputs.new_release_tag }}
