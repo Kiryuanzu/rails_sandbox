@@ -27,6 +27,7 @@ jobs:
       - run: |
           git show
           git show ${{ github.event.pull_request.head.sha }}
+          git show ${{ github.sha }}
           git tag ${{ steps.release_date.outputs.new_release_tag }}
           git show ${{ steps.release_date.outputs.new_release_tag }}
           git push origin ${{ steps.release_date.outputs.new_release_tag }}
