@@ -25,6 +25,7 @@ jobs:
           release_datetime=$(date +'%Y%m%d-%H%M')
           echo "new_release_tag=v$release_datetime" >> $GITHUB_OUTPUT
       - run: |
+          git show ${{ github.event.pull_request.head.sha }}
           git tag ${{ steps.release_date.outputs.new_release_tag }} ${{ github.event.pull_request.head.sha }}
           git show ${{ steps.release_date.outputs.new_release_tag }}
           git push origin ${{ steps.release_date.outputs.new_release_tag }}
