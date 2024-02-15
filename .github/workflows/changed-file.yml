@@ -1,0 +1,41 @@
+name: tag push
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-changed-file:
+    name: Check changed-file
+    runs-on: ubuntu-latest
+    outputs:
+      has-changed-related-files: ${{ steps.check-related-files.outputs.any_changed == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check related files
+        id: check-related-files
+        uses: tj-actions/changed-files@v42
+        with:
+          files: "app/**"
+ changed:
+   name: changed
+    needs: check-changed-file
+    if: needs.check-changed-file.outputs.has-changed-related-files == 'true'
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v4
+     - run: echo "changed"
+  no_changed:
+    name: no changed
+    needs: check-changed-file
+    if: needs.check-changed-file.outputs.has-changed-related-files == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: no changed
+        run: echo "no changed"
