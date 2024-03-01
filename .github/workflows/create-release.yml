@@ -1,7 +1,7 @@
 name: Create Release
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: write
@@ -10,10 +10,10 @@ jobs:
   check-release-tag:
     runs-on: ubuntu-latest
     outputs:
-      latest_release_tag:  ${{ steps.latest_release_tag.outputs.latest_release_tag }}
+      latest_release_tag: ${{ steps.latest_release_tag.outputs.latest_release_tag }}
       latest_tag: ${{ steps.latest_tag.outputs.latest_tag }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Get latest release
@@ -40,7 +40,7 @@ jobs:
     needs: check-release-tag
     if: ${{ needs.check-release-tag.outputs.latest_release_tag != needs.check-release-tag.outputs.latest_tag }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@v4
       - name: delete tag
         run: |
           git push origin --delete ${{ needs.check-release-tag.outputs.latest_tag }}

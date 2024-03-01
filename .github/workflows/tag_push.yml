@@ -14,11 +14,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@v4
       - name: get release date
         id: release_date
         env:
-          TZ: 'Asia/Tokyo'
+          TZ: "Asia/Tokyo"
         run: |
           release_datetime=$(date +'%Y%m%d-%H%M')
           echo "new_release_tag=v$release_datetime" >> $GITHUB_OUTPUT
