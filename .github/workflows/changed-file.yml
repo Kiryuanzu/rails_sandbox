@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - name: Check related files
         id: check-related-files
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@2d756ea4c53f7f6b397767d8723b3a10a9f35bf2 # v44
         with:
           files: "app/**"
  changed:
